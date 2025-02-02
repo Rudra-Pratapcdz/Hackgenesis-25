@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Occupancy & Queue Management</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9800, #ffcc80, #cddc39, #ffffff);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            margin: 0;
+            color: white;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 300px;
+            padding: 25px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            top: 0;
+            left: -100%;
+            transition: left 0.3s ease;
+        }
+
+        .card:hover::after {
+            left: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Resta-radar Card -->
+        <div class="card" id="Resta-radar" onclick="runHpyApp()">
+            <h2>🏨 Resta-radar</h2>
+            <p>Plan your meal without hassle</p>
+        </div>
+
+        <!-- Q-watch Card -->
+        <div class="card" id="Q-watch" onclick="runQpyApp()">
+            <h2>⏳ Q-watch</h2>
+            <p>Manage and monitor queue status in real-time.</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to trigger hpy.py when Resta-radar card is clicked
+        function runHpyApp() {
+            fetch('/run-hpy')  // This will trigger the backend to run hpy.py
+                .then(response => response.json())
+                .then(data => {
+                    alert('Flask app triggered (hpy.py): ' + data.message);
+                });
+        }
+
+        // Function to trigger qpy.py when Q-watch card is clicked
+        function runQpyApp() {
+            fetch('/run-qpy')  // This will trigger the backend to run qpy.py
+                .then(response => response.json())
+                .then(data => {
+                    alert('Flask app triggered (qpy.py): ' + data.message);
+                });
+        }
+    </script>
+</body>
+</html>

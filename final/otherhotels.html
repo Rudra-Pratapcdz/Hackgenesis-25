@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delhi Restaurants</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="container">
+        <h1>🍽 Best Restaurants in Delhi, India</h1>
+
+        <!-- Search Bar -->
+        <input type="text" id="search-bar" placeholder="Search by name or location..." onkeyup="searchRestaurants()">
+
+        <div id="restaurant-list" class="restaurant-grid">
+            <!-- Restaurants will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Modal for Menu -->
+    <div id="menu-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMenu()">&times;</span>
+            <h2 id="menu-title"></h2>
+            <ul id="menu-items"></ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const restaurantList = document.getElementById("restaurant-list");
+            const menuModal = document.getElementById("menu-modal");
+            const menuTitle = document.getElementById("menu-title");
+            const menuItems = document.getElementById("menu-items");
+
+            function getRandomRating() {
+                return (Math.random() * 1.5 + 3.5).toFixed(1); // Rating between 3.5 and 5.0
+            }
+
+            const restaurants = [
+                {
+                    name: "🍛 Karim's",
+                    location: "Old Delhi, India",
+                    rating: getRandomRating(),
+                    image: "https://source.unsplash.com/400x300/?mughlai,food",
+                    menu: ["Chicken Biryani", "Mutton Korma", "Butter Naan", "Seekh Kebab", "Rogan Josh"],
+                    booking: "#"
+                },
+                {
+                    name: "🍲 Indian Accent",
+                    location: "Lodhi Road, Delhi, India",
+                    rating: getRandomRating(),
+                    image: "https://source.unsplash.com/400x300/?indianfood",
+                    menu: ["Dal Makhani", "Paneer Tikka", "Garlic Naan", "Tandoori Mushroom", "Chili Chicken"],
+                    booking: "#"
+                },
+                {
+                    name: "🥘 Bukhara",
+                    location: "ITC Maurya, Delhi, India",
+                    rating: getRandomRating(),
+                    image: "https://source.unsplash.com/400x300/?dal,tandoori",
+                    menu: ["Tandoori Roti", "Butter Chicken", "Daal Bukhara", "Barrah Kebab", "Tandoori Jhinga"],
+                    booking: "#"
+                },
+                {
+                    name: "🍜 Moti Mahal",
+                    location: "Daryaganj, Delhi, India",
+                    rating: getRandomRating(),
+                    image: "https://source.unsplash.com/400x300/?butter,chicken",
+                    menu: ["Tandoori Chicken", "Shahi Paneer", "Roomali Roti", "Kadai Chicken", "Malai Kofta"],
+                    booking: "#"
+                },
+                {
+                    name: "🍣 Wasabi by Morimoto",
+                    location: "Taj Mahal Hotel, Delhi, India",
+                    rating: getRandomRating(),
+                    image: "https://source.unsplash.com/400x300/?sushi,japanese",
+                    menu: ["Sushi Platter", "Sashimi", "Miso Soup", "Tempura", "Teriyaki Chicken"],
+                    booking: "#"
+                },
+                {
+                    name: "🥗 The Big Chill Cafe",
+                    location: "Khan Market, Delhi, India",
+                    rating: getRandomRating(),
+                    image: "https://source.unsplash.com/400x300/?italian,pasta",
+                    menu: ["Penne Vodka", "Caesar Salad", "Tiramisu", "Spaghetti Carbonara", "Garlic Bread"],
+                    booking: "#"
+                }
+            ];
+
+            function displayRestaurants() {
+                restaurantList.innerHTML = "";
+                restaurants.forEach((restaurant, index) => {
+                    const card = document.createElement("div");
+                    card.classList.add("restaurant-card");
+
+                    card.innerHTML = `
+                        <img src="${restaurant.image}" alt="${restaurant.name}">
+                        <h2>${restaurant.name}</h2>
+                        <p>${restaurant.location}</p>
+                        <div class="rating">⭐ ${restaurant.rating}</div>
+                        <button onclick="showMenu(${index})" class="view-menu">View Menu</button>
+                        <a href="${restaurant.booking}" class="book-table">Book Table</a>
+                    `;
+
+                    restaurantList.appendChild(card);
+                });
+            }
+
+            window.showMenu = function (index) {
+                menuTitle.textContent = restaurants[index].name + " Menu";
+                menuItems.innerHTML = restaurants[index].menu.map(item => <li>${item}</li>).join('');
+                menuModal.style.display = "block";
+            };
+
+            window.closeMenu = function () {
+                menuModal.style.display = "none";
+            };
+
+            displayRestaurants();
+        });
+    </script>
+</body>
+</html>

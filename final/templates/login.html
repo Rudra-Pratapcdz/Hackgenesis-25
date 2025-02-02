@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RushRadar Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffb84d, #ff9966);
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 380px;
+            animation: fadeIn 1s ease-in-out;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .logo {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #e67e22;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #e67e22;
+            border-radius: 6px;
+            font-size: 16px;
+            background: #fff8f0;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #d35400;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #e67e22, #d35400);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #d35400, #e67e22);
+            transform: scale(1.05);
+        }
+
+        a {
+            color: #e67e22;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Form -->
+    <div class="container" id="login-container">
+        <img src="logo.webp" alt="Restaurant Logo" class="logo">
+        <h2>Time is expensive!</h2>
+        <p>Login to manage you most valuable resource!</p>
+        
+        <form id="login-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+            <p id="error-message" class="message"></p>
+        </form>
+
+        <p>Don't have an account? <a href="#" id="register-link">Register</a></p>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="container hidden" id="register-container">
+        <img src="logo.png" alt="Restaurant Logo" class="logo">
+        <h2>Create an Account ⏰</h2>
+        <form id="register-form">
+            <input type="email" id="reg-email" placeholder="Email" required>
+            <input type="password" id="reg-password" placeholder="Password" required>
+            <button type="submit">Register</button>
+            <p id="register-message" class="message"></p>
+        </form>
+        <p>Already have an account? <a href="#" id="login-link">Login</a></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginForm = document.getElementById("login-form");
+            const registerForm = document.getElementById("register-form");
+            const errorMessage = document.getElementById("error-message");
+            const registerMessage = document.getElementById("register-message");
+            const registerLink = document.getElementById("register-link");
+            const loginLink = document.getElementById("login-link");
+            const loginContainer = document.getElementById("login-container");
+            const registerContainer = document.getElementById("register-container");
+
+            // Smooth Switch Between Forms
+            registerLink.addEventListener("click", function () {
+                loginContainer.classList.add("hidden");
+                registerContainer.classList.remove("hidden");
+            });
+
+            loginLink.addEventListener("click", function () {
+                registerContainer.classList.add("hidden");
+                loginContainer.classList.remove("hidden");
+            });
+
+            // Register User
+            registerForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const regEmail = document.getElementById("reg-email").value;
+                const regPassword = document.getElementById("reg-password").value;
+
+                if (localStorage.getItem(regEmail)) {
+                    registerMessage.textContent = "User already exists!";
+                    registerMessage.style.color = "red";
+                } else {
+                    const hashedPassword = btoa(regPassword);
+                    localStorage.setItem(regEmail, hashedPassword);
+                    registerMessage.textContent = "Registration successful!";
+                    registerMessage.style.color = "green";
+                    setTimeout(() => {
+                        registerContainer.classList.add("hidden");
+                        loginContainer.classList.remove("hidden");
+                    }, 1500);
+                }
+            });
+
+            // Login User
+            loginForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                const storedPassword = localStorage.getItem(email);
+
+                if (storedPassword && storedPassword === btoa(password)) {
+                    alert("Login successful! 👍 ");
+                    window.location.href = "dashboard.html";
+                } else {
+                    errorMessage.textContent = "Invalid email or password!";
+                    errorMessage.style.color = "red";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
